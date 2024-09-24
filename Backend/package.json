@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "dev": "nodemon src/main.js"
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,8 +16,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
+    "modbus-serial": "^8.0.17",
     "morgan": "^1.10.0",
-    "mssql": "^11.0.1"
+    "mysql": "^2.18.1",
+    "socket.io": "^4.8.0"
   }
 }
