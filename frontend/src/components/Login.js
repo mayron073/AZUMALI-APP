@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-//import clienteAxios from '../config/axios';
 import useAuth from '../hooks/useAuth';
-
+import '../styles/Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -16,11 +15,10 @@ const Login = () => {
 
         try {
             const { data } = await axios.post('http://localhost:4000/usuarios/login', {username, password});
-
-            localStorage.getItem('token', data.token);
+            localStorage.setItem('token', data.token);
             console.log(data);
             setAuth(data);
-            history('/Dashboard');
+            history('/sensores');
 
         } catch (error) {
             console.log(error);
@@ -29,9 +27,9 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className="login-container">
             <h2>Ingresar</h2>
-            <form onSubmit={handleSubmit}>
+            <form className="login-form" onSubmit={handleSubmit}>
                 <input 
                     type="text" 
                     placeholder="Usuario" 
@@ -45,7 +43,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)} 
                 />
                 <button type="submit">iniciar sesion</button>
-                <Link to='/resister'>¿No tienes una cuenta?</Link>
+                <Link to='/registro'>¿No tienes una cuenta?</Link>
             </form>
         </div>
     );

@@ -1,46 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import NavBar from '../components/Navbar';
+import useAuth from '../hooks/useAuth';
+import '../styles/AdminPanel.css';
 
 const AdminPanel = () => {
-  const [users, setUsers] = useState([]);
+  const [ usuarios, setUsuarios] = useState([]);
+  const { getUsers, users } = useAuth();
 
   useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const { data } = await axios.get('/api/users');
-        setUsers(data);
-      } catch (error) {
-        console.error('Failed to fetch users:', error);
-      }
-    };
-
+      const data = await getUsers();
+      setUsuarios(data);
+    }
     fetchUsers();
   }, []);
 
   return (
-    <div>
-      <h1>Admin Panel</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
+    <>
+      <NavBar/>
+      <div className="admin-panel-container">
+        <h2>Tabla de usuarios</h2>
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Rol</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {usuarios.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.username}</td>
+                <td>{user.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import SensorGraph from '../components/SensorGraph.js';
+import NavBar from '../components/Navbar.js';
 
 const Dashboard = () => {
   return (
     <div>
-      <h1>Dashboard</h1>
-      {<SensorGraph />}
+      {<NavBar />}
     </div>
   );
 };

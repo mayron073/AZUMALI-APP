@@ -1,31 +1,38 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import '../styles/AuthForms.css';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('user'); // Por defecto, los usuarios son normales
+    const [role, setRole] = useState('user');
     const history = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, role })
-        });
+        
+        try {
+            const data = await axios.post('http://localhost:4000/usuarios/register', {
+                username, 
+                password,
+                role
+            });
 
-        if (response.ok) {
-            history.push('/login'); // Redirigir al login después de registrar
-        } else {
-            console.error('Error al registrar');
+            if (data.status === 201) {
+                history('/');
+            } else {
+                console.error('Error al registrar');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud de registro:', error);
         }
     };
 
     return (
-        <div>
+        <div className="auth-container">
             <h2>Registro</h2>
-            <form onSubmit={handleSubmit}>
+            <form className="auth-form" onSubmit={handleSubmit}>
                 <input 
                     type="text" 
                     placeholder="Usuario" 
@@ -38,6 +45,14 @@ const Register = () => {
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
                 />
+                <label>Rol</label>
+                <select 
+                    value={role} 
+                    onChange={(e) => setRole(e.target.value)}
+                >
+                    <option value="user">Usuario</option>
+                    <option value="admin">Administrador</option>
+                </select>
                 <button type="submit">Registrar</button>
             </form>
         </div>

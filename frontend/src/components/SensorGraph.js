@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Line } from 'react-chartjs-2';
-import io from 'socket.io-client'; // Importar socket.io-client
+import io from 'socket.io-client'; 
+
+import useSensor from '../hooks/useSensor';
+import NavBar from './Navbar';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,35 +27,29 @@ ChartJS.register(
   Legend
 );
 
-const socket = io('http://localhost:3000'); // Conectar con el servidor WebSocket
+const socket = io('http://localhost:3000');
 
-const SensorGraph = () => {
-  const [sensorData, setSensorData] = useState([]);
-  const [column, setColumn] = useState('temperatura_ambiente'); // Columna por defecto para mostrar en la gráfica
+const SensorGraph = ({sensor = 'temperatura_ambiente'}) => {
+  const [column, setColumn] = useState('');
   const [labels, setLabels] = useState([]);
   const [data, setData] = useState([]);
+  const { getSensorDate, sensorDate } = useSensor();
 
-  // Función para obtener los datos iniciales del sensor desde la API
-  const fetchSensorData = async (selectedColumn) => {
-    try {
-      const response = await axios.get(`http://localhost:3000/sensor?column=${selectedColumn}`);
-      const fetchedData = response.data;
-
-      const dates = fetchedData.map((item) => item.fecha);
-      const sensorValues = fetchedData.map((item) => item[selectedColumn]);
-
-      setLabels(dates);
-      setData(sensorValues);
-    } catch (error) {
-      console.error('Error fetching sensor data:', error);
-    }
-  };
+  useEffect(() => {    
+    getSensorDate(sensor);
+    setColumn(sensor);
+  }, [sensor]);
 
   useEffect(() => {
-    // Llamar a la API cuando el componente se monta para obtener datos iniciales
-    fetchSensorData(column);
+    if (Array.isArray(sensorDate)) {
+      const dates = sensorDate.map((item) => item.fecha);
+      const sensorValues = sensorDate.map((item) => item[sensor]);
+      setLabels(dates);
+      setData(sensorValues);
+    }
+  }, [sensorDate, sensor]);
 
-    // Configurar la escucha de eventos para recibir datos en tiempo real desde el servidor WebSocket
+  useEffect(() => {
     socket.on('sensorData', (newData) => {
       // Actualizar los datos del sensor seleccionado en tiempo real
       if (newData[column]) {
@@ -66,6 +63,7 @@ const SensorGraph = () => {
       socket.off('sensorData');
     };
   }, [column]); // Volver a llamar a la API y escuchar el socket cuando se cambie el sensor
+
 
   // Opciones para la gráfica
   const chartData = {
@@ -97,24 +95,16 @@ const SensorGraph = () => {
   };
 
   return (
-    <div className="App">
-      <h1>Gráfica de Sensores</h1>
-
-      {/* Botones para seleccionar qué sensor mostrar */}
-      <div>
-        <button onClick={() => setColumn('temperatura_ambiente')}>Temperatura Ambiente</button>
-        <button onClick={() => setColumn('temperatura_interna')}>Temperatura Interna</button>
-        <button onClick={() => setColumn('humedad_relativa')}>Humedad Relativa</button>
-        <button onClick={() => setColumn('radiacion')}>Radiación</button>
-        <button onClick={() => setColumn('velocidad_viento')}>Velocidad Viento</button>
-        <button onClick={() => setColumn('direccion_viento')}>Dirección Viento</button>
+    <>
+      <NavBar />
+      <div className="App">
+        {/* Componente gráfico de línea */}
+        <div style={{ width: '80%', margin: 'auto', padding: '20px' }}>
+          <Line data={chartData} options={options} />
+        </div>
       </div>
+    </>
 
-      {/* Componente gráfico de línea */}
-      <div style={{ width: '80%', margin: 'auto', padding: '20px' }}>
-        <Line data={chartData} options={options} />
-      </div>
-    </div>
   );
 };
 
