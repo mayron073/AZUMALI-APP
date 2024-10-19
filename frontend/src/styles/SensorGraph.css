@@ -1,0 +1,35 @@
+/* SensorGraph.css */
+
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    margin: 1% 0% 0% 20%;
+    position: absolute;
+  }
+  
+  .filter-buttons button {
+    background-color: #4CAF50; /* Color predeterminado: verde */
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-buttons button:hover {
+    background-color: #45a049; 
+  }
+  
+  
+  .chart-container {
+    margin: 1% 10% 0% 10%;
+    width: 80%;
+    height: 80%;
+  }
+  

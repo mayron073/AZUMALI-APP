@@ -1,12 +1,19 @@
 
-/* Contenedor principal centrado */
 .login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f5f5f5;
+    background-color: #72f4af;
+}
+
+.img- {
+    height: 40%;
+    width: 30%;
+    position: absolute;
+    left: 33%;
+    top: 2%;
 }
 
 /* Título del formulario */
@@ -18,13 +25,15 @@
 
 /* Estilos para el formulario */
 .login-form {
-    background-color: #fff;
+    background-color: #B6FFA1;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    position: relative;
 }
+
 
 /* Estilos para los campos de entrada */
 .login-form input {
@@ -41,7 +50,7 @@
 .login-form button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff;
+    background-color: #347928;
     color: white;
     border: none;
     border-radius: 5px;
@@ -51,7 +60,7 @@
 }
 
 .login-form button:hover {
-    background-color: #0056b3;
+    background-color: #3ca446;
 }
 
 /* Enlace de registro */

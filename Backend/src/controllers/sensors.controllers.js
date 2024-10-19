@@ -9,20 +9,32 @@ const dataBits = 8;
 const parity = 'none';
 const stopBits = 1; 
 
-// Obtener todos los datos de las columnas fecha y sensor 
+
 exports.getAllSensorData = (req, res) => {
-    const {column} = req.query;
-    if (!column) {
-        return res.status(400).json({ error: 'La columna no fue especificada' });
-      }
-  const query = 'SELECT fecha, ?? FROM sensores';
-  db.query(query, [column], (err, results) => {
+  const { column, limit } = req.query;
+
+  if (!column) {
+    return res.status(400).json({ error: 'La columna no fue especificada' });
+  }
+
+  let query = 'SELECT fecha, ?? FROM sensores ORDER BY fecha DESC';
+  const queryParams = [column];
+
+  if (limit) {
+    query += ' LIMIT ?';
+    queryParams.push(parseInt(limit)); // Asegurar que el límite sea un número entero
+  }
+
+  db.query(query, queryParams, (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Error ejecutando la consulta', details: err });
     }
+
+    // No es necesario procesar las fechas, ya que se devolverán en el formato correcto
     res.json(results);
   });
 };
+
 
 // Obtener los nombres de todas las columnas
 exports.getColumnNames = (req, res) => {

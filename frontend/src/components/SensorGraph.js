@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import io from 'socket.io-client'; 
-
 import useSensor from '../hooks/useSensor';
 import NavBar from './Navbar';
+import '../styles/SensorGraph.css';
 
 import {
   Chart as ChartJS,
@@ -27,50 +27,103 @@ ChartJS.register(
   Legend
 );
 
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.1.58:4000' ,{
+  transports: ['websocket'],  
+  withCredentials: true,
+});
 
-const SensorGraph = ({sensor = 'temperatura_ambiente'}) => {
+const sensorUnits = {
+  temperatura_ambiente: '°C',
+  temperatura_interna: '°C',
+  humedad_relativa: '%',
+  radiacion: 'W/m²',
+  velocidad_viento: 'm/s',
+  direccion_viento: 'Grados N = 0'
+};
+
+const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
   const [column, setColumn] = useState('');
   const [labels, setLabels] = useState([]);
   const [data, setData] = useState([]);
   const { getSensorDate, sensorDate } = useSensor();
+  const [filter, setFilter] = useState('hora');
+  const [ text, setText ] = useState('');
 
-  useEffect(() => {    
-    getSensorDate(sensor);
+  // Función para obtener el número de datos según el filtro seleccionado
+  const getLimitByFilter = (filter) => {
+    switch (filter) {
+      case 'hora':
+        return 60; // Últimos 60 datos (cada 60 segundos = 1 hora)
+      case 'diario':
+        return 1440; // Últimos 1440 datos (uno por cada minuto durante 24 horas)
+      case 'mes':
+        return 43200; // Últimos 43200 datos (uno por cada minuto durante 30 días)
+      default:
+        return 60; // Por defecto, mostrar los datos de la última hora
+    }
+  };
+
+  const filterDataByTime = (sensorDate, filter) => {
+    switch (filter) {
+      case 'diario':
+        // Filtrar para obtener un dato por cada hora (1440 datos -> 24 datos)
+        return sensorDate.filter((item, index) => index % 60 === 0);
+      case 'mes':
+        // Filtrar para obtener un dato por cada día (43200 datos -> 30 datos)
+        return sensorDate.filter((item, index) => index % 1440 === 0);
+      default:
+        // Para la opción "hora" devolvemos todos los datos
+        return sensorDate;
+    }
+  };
+
+  useEffect(() => {
+    const limit = getLimitByFilter(filter); 
+    getSensorDate(sensor, limit);
     setColumn(sensor);
-  }, [sensor]);
+    
+    if (filter === 'hora')
+      setText('a hora');
+    if (filter === 'diario')
+      setText('os dias');
+    if (filter === 'mes')
+      setText('os meses');
+
+  }, [sensor, filter]); // Ejecutar al cambiar el sensor o el filtro seleccionado
 
   useEffect(() => {
     if (Array.isArray(sensorDate)) {
-      const dates = sensorDate.map((item) => item.fecha);
-      const sensorValues = sensorDate.map((item) => item[sensor]);
+      const filteredData = filterDataByTime(sensorDate, filter);
+
+      const dates = filteredData.map((item) => item.fecha);
+      const sensorValues = filteredData.map((item) => item[sensor]);
+
       setLabels(dates);
       setData(sensorValues);
     }
-  }, [sensorDate, sensor]);
+  }, [sensorDate, sensor, filter]);
 
   useEffect(() => {
     socket.on('sensorData', (newData) => {
-      // Actualizar los datos del sensor seleccionado en tiempo real
       if (newData[column]) {
         setLabels((prevLabels) => [...prevLabels, new Date().toLocaleString()]);
         setData((prevData) => [...prevData, newData[column]]);
       }
     });
 
-    // Desconectar el socket al desmontar el componente
     return () => {
       socket.off('sensorData');
     };
-  }, [column]); // Volver a llamar a la API y escuchar el socket cuando se cambie el sensor
+  }, [column]);
 
+  const unit = sensorUnits[sensor] || '';
 
   // Opciones para la gráfica
   const chartData = {
     labels: labels,
     datasets: [
       {
-        label: `Valores de ${column}`,
+        label: `${column} (${unit})`,
         data: data,
         fill: false,
         backgroundColor: 'rgba(75,192,192,0.2)',
@@ -89,7 +142,7 @@ const SensorGraph = ({sensor = 'temperatura_ambiente'}) => {
       },
       title: {
         display: true,
-        text: `Gráfica de ${column} con respecto a la fecha`,
+        text: `${column} (${unit}) ultim${text} `,
       },
     },
   };
@@ -98,13 +151,19 @@ const SensorGraph = ({sensor = 'temperatura_ambiente'}) => {
     <>
       <NavBar />
       <div className="App">
+        {/* Botones para seleccionar el filtro */}
+        <div className="filter-buttons">
+          <button onClick={() => setFilter('hora')}>Hora</button>
+          <button onClick={() => setFilter('diario')}>Diario</button>
+          <button onClick={() => setFilter('mes')}>Mes</button>
+        </div>
+
         {/* Componente gráfico de línea */}
-        <div style={{ width: '80%', margin: 'auto', padding: '20px' }}>
+        <div className="chart-container">
           <Line data={chartData} options={options} />
         </div>
       </div>
     </>
-
   );
 };
 

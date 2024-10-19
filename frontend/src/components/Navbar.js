@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import '../styles/NavBar.css';
+import sena from '../assets/sena.png';
 
 const NavBar = () => {
     const { userRole, getUserRole, logoutUser } = useAuth();
@@ -19,7 +20,7 @@ const NavBar = () => {
 
     return (
         <nav className="navbar">
-            <h3>Variables del clima</h3>
+            <img src={sena} alt='sena-logo' className='img'></img>
             <ul className="nav-links">
                 <li>
                     <Link to="/sensores/temperature">Temperatura Ambiente</Link>

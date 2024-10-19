@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import '../styles/Login.css';
+import logo from '../assets/sena-c.png'
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const { data } = await axios.post('http://localhost:4000/usuarios/login', {username, password});
+            const { data } = await axios.post('http://192.168.1.58:4000/usuarios/login', {username, password});
             localStorage.setItem('token', data.token);
             console.log(data);
             setAuth(data);
@@ -28,8 +29,13 @@ const Login = () => {
 
     return (
         <div className="login-container">
-            <h2>Ingresar</h2>
+            <div className='img-'>
+                <img src='' alt='img fondo' className='img'></img>
+            </div>
+            
             <form className="login-form" onSubmit={handleSubmit}>
+                
+            <h2>INGRESAR</h2>
                 <input 
                     type="text" 
                     placeholder="Usuario" 
@@ -42,12 +48,12 @@ const Login = () => {
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
                 />
-                <button type="submit">iniciar sesion</button>
+                
+                <button type="submit"> iniciar sesion </button> 
                 <Link to='/registro'>¿No tienes una cuenta?</Link>
             </form>
         </div>
     );
 };
-
 export default Login;
 

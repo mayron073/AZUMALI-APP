@@ -4,7 +4,8 @@ const db = mysql.createConnection({
     host: 'localhost', 
     user: 'proof1',       
     password: 'Mm1007901Mm', 
-    database: 'weather_station'  
+    database: 'weather_station',
+    dateStrings: true
   });
 
 db.connect((err) => {
