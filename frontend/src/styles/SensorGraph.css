@@ -1,35 +1,83 @@
-/* SensorGraph.css */
-
 .filter-buttons {
-    display: flex;
-    justify-content: center;
-    margin: 1% 0% 0% 20%;
-    position: absolute;
+  display: flex;
+  justify-content: center;
+  margin: 1% 0% 0% 20%;
+  position: absolute;
+}
+
+/* Botones con estilo predeterminado */
+.filter-buttons button {
+  background-color: #4CAF50; /* Verde predeterminado */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 12px;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-buttons button:hover {
+  background-color: #45a049;
+}
+
+/* Contenedor del gráfico */
+.chart-container {
+  margin: 1% 10% 0% 10%;
+  width: 80%;
+  height: 80%;
+}
+
+/* Estilos responsivos */
+
+/* Pantallas medianas (tablets) */
+@media (max-width: 1024px) {
+  .filter-buttons {
+      margin-left: 10%; /* Mover botones más a la izquierda */
   }
   
   .filter-buttons button {
-    background-color: #4CAF50; /* Color predeterminado: verde */
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-    margin: 0 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+      font-size: 11px; /* Reducir tamaño de las letras */
   }
-  
-  .filter-buttons button:hover {
-    background-color: #45a049; 
-  }
-  
-  
+
   .chart-container {
-    margin: 1% 10% 0% 10%;
-    width: 80%;
-    height: 80%;
+      width: 90%;
+      margin-left: 5%;
   }
-  
+}
+
+/* Pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+  .filter-buttons {
+      margin-left: 5%; /* Botones más a la izquierda */
+  }
+
+  .filter-buttons button {
+      font-size: 10px; /* Aún más pequeño en móviles */
+      padding: 4px 8px; /* Reducir el padding */
+  }
+
+  .chart-container {
+      width: 100%;
+      margin-left: 0;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .filter-buttons {
+      margin-left: 2%; /* Casi al borde en pantallas muy pequeñas */
+  }
+
+  .filter-buttons button {
+      font-size: 9px;
+      padding: 3px 6px; /* Más pequeño para dispositivos pequeños */
+  }
+
+  .chart-container {
+      width: 100%;
+      margin-left: 0;
+  }
+}

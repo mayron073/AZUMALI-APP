@@ -39,7 +39,7 @@
 }
 
 .nav-links a:hover {
-    background-color: #72BF78;
+    color: #80ff8b;
     border-radius: 5px;
 }
 
@@ -94,4 +94,42 @@
 .dropdown-menu button:hover {
     background-color: #347928;
     border-radius: 5px;
+}
+
+/* Media queries para pantallas medianas (tablets) */
+@media (max-width: 1024px) {
+    .nav-links a {
+        font-size: 14px;
+    }
+}
+
+/* Media queries para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    .dropdown-toggle {
+        font-size: 12px;
+    }
+
+    .dropdown-menu li {
+        font-size: 12px;
+    }
+
+}
+
+/* Media queries para pantallas muy pequeñas (moviles más pequeños) */
+@media (max-width: 480px) {
+    .nav-links a {
+        font-size: 10px;
+    }
+
+    .dropdown-toggle {
+        font-size: 10px;
+    }
+
+    .dropdown-menu li {
+        font-size: 10px;
+    }
 }

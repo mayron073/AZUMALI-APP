@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/AuthForms.css';
+import logo from '../assets/logo.jpg'
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -13,7 +15,7 @@ const Register = () => {
         e.preventDefault();
         
         try {
-            const data = await axios.post('http://192.168.1.58:4000/usuarios/register', {
+            const data = await axios.post('http://192.168.1.65:4000/usuarios/register', {
                 username, 
                 password,
                 role
@@ -31,8 +33,11 @@ const Register = () => {
 
     return (
         <div className="auth-container">
-            <h2>Registro</h2>
             <form className="auth-form" onSubmit={handleSubmit}>
+                <div className='img-container'>
+                    <img src={logo} alt='img fondo' className='img-logo'></img>
+                </div>
+                <h2>Registro</h2>
                 <input 
                     type="text" 
                     placeholder="Usuario" 
@@ -54,6 +59,7 @@ const Register = () => {
                     <option value="admin">Administrador</option>
                 </select>
                 <button type="submit">Registrar</button>
+                <Link to='/'>Regresar</Link>
             </form>
         </div>
     );

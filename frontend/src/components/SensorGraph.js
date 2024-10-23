@@ -27,7 +27,7 @@ ChartJS.register(
   Legend
 );
 
-const socket = io('http://192.168.1.58:4000' ,{
+const socket = io('http://192.168.1.65:4000' ,{
   transports: ['websocket'],  
   withCredentials: true,
 });

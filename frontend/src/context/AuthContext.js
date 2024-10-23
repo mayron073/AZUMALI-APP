@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react';
 import {jwtDecode} from 'jwt-decode';
 import axios from 'axios';
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const AuthContext = createContext();
 
@@ -57,7 +58,7 @@ const AuthProvider = ({ children }) => {
               },
             };
       
-            const response = await axios.get('http://192.168.1.58:4000/usuarios/users', config);
+            const response = await axios.get('http://192.168.1.65:4000/usuarios/users', config);
             setUsers(response.data);
             console.log(response.data);
             return response.data;

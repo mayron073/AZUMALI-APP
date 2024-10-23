@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
-
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const SensorContext = createContext();
 
 const SensorProvider = ({ children }) => {
@@ -23,13 +23,9 @@ const SensorProvider = ({ children }) => {
       queryParams.append('limit', limit); // Límite de datos para hora, diario o mes
 
       // Solicitud GET a la ruta '/sensor-date'
-      const response = await axios.get(`http://192.168.1.58:4000/sensores/sensor-date?${queryParams.toString()}`, config);
+      const response = await axios.get(`http://192.168.1.65:4000/sensores/sensor-date?${queryParams.toString()}`, config);
       setSensorDate(response.data);
 
-      /*
-      const response = await axios.get(`http://localhost:4000/sensores/sensor-date?column=${sensor}`, config);
-      setSensorDate(response.data);*/
-      
     } catch (error) {
       console.log(error);
     }

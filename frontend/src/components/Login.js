@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import '../styles/Login.css';
-import logo from '../assets/sena-c.png'
+import logo from '../assets/logo.jpg'
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -15,7 +16,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const { data } = await axios.post('http://192.168.1.58:4000/usuarios/login', {username, password});
+            const { data } = await axios.post(`http://192.168.1.65:4000/usuarios/login`, {username, password});
             localStorage.setItem('token', data.token);
             console.log(data);
             setAuth(data);
@@ -28,13 +29,11 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className='img-'>
-                <img src='' alt='img fondo' className='img'></img>
-            </div>
-            
+        <div className="login-container">    
             <form className="login-form" onSubmit={handleSubmit}>
-                
+            <div className='img-container'>
+                <img src={logo} alt='img fondo' className='img-logo'></img>
+            </div>
             <h2>INGRESAR</h2>
                 <input 
                     type="text" 

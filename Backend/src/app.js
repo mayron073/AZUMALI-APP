@@ -10,8 +10,8 @@ const sensorController = require('./controllers/sensors.controllers');
 const authMiddleware  = require('./middlewares/auth.middleware');
 
 //console.log("JWT Secret:", process.env.JWT_SECRET);
-const PORT = process.env.PORT || 4000;
-const IP = '192.168.1.58';
+const PORT = process.env.PORT || 5000;
+const IP = process.env.LOCAL_IP;
 
 const app = express();
 app.use(express.json());
@@ -23,7 +23,7 @@ const server = http.createServer(app);
 
 const io = socketIO(server, {
   cors: {
-    origin: 'http://192.168.1.58:3000',  // Permitir conexiones desde el frontend
+    origin: 'http://192.168.1.65:3000',  // Permitir conexiones desde el frontend
     methods: ['GET', 'POST'],
     credentials: true,
   },
