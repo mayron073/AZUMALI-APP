@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
-import io from 'socket.io-client'; 
+import { io } from 'socket.io-client'; 
 import useSensor from '../hooks/useSensor';
 import NavBar from './Navbar';
 import '../styles/SensorGraph.css';
@@ -48,31 +48,30 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
   const { getSensorDate, sensorDate } = useSensor();
   const [filter, setFilter] = useState('hora');
   const [ text, setText ] = useState('');
+  
+  const chartRef = useRef(null); // Referencia para la gráfica
 
   // Función para obtener el número de datos según el filtro seleccionado
   const getLimitByFilter = (filter) => {
     switch (filter) {
       case 'hora':
-        return 60; // Últimos 60 datos (cada 60 segundos = 1 hora)
+        return 60; 
       case 'diario':
-        return 1440; // Últimos 1440 datos (uno por cada minuto durante 24 horas)
+        return 1440; 
       case 'mes':
-        return 43200; // Últimos 43200 datos (uno por cada minuto durante 30 días)
+        return 43200; 
       default:
-        return 60; // Por defecto, mostrar los datos de la última hora
+        return 60; 
     }
   };
 
   const filterDataByTime = (sensorDate, filter) => {
     switch (filter) {
       case 'diario':
-        // Filtrar para obtener un dato por cada hora (1440 datos -> 24 datos)
         return sensorDate.filter((item, index) => index % 60 === 0);
       case 'mes':
-        // Filtrar para obtener un dato por cada día (43200 datos -> 30 datos)
         return sensorDate.filter((item, index) => index % 1440 === 0);
       default:
-        // Para la opción "hora" devolvemos todos los datos
         return sensorDate;
     }
   };
@@ -88,8 +87,7 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
       setText('os dias');
     if (filter === 'mes')
       setText('os meses');
-
-  }, [sensor, filter]); // Ejecutar al cambiar el sensor o el filtro seleccionado
+  }, [sensor, filter]);
 
   useEffect(() => {
     if (Array.isArray(sensorDate)) {
@@ -136,15 +134,33 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // Permite que la gráfica se ajuste dinámicamente
     plugins: {
       legend: {
         position: 'top',
+        display: window.innerWidth > 600, // Ocultar leyenda en pantallas pequeñas
       },
       title: {
         display: true,
         text: `${column} (${unit}) ultim${text} `,
       },
     },
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: window.innerWidth < 600 ? 10 : 12, // Ajuste de tamaño en pantallas pequeñas
+          }
+        }
+      },
+      y: {
+        ticks: {
+          font: {
+            size: window.innerWidth < 600 ? 10 : 12, // Ajuste de tamaño en pantallas pequeñas
+          }
+        }
+      }
+    }
   };
 
   return (
@@ -160,7 +176,7 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
 
         {/* Componente gráfico de línea */}
         <div className="chart-container">
-          <Line data={chartData} options={options} />
+          <Line data={chartData} options={options} ref={chartRef} />
         </div>
       </div>
     </>
@@ -168,3 +184,4 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
 };
 
 export default SensorGraph;
+

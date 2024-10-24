@@ -101,6 +101,8 @@ exports.readSerialData = (io) => {
       exports.insertSensorData(sensorData);
 
       io.emit('sensorData', sensorData);
+      console.log('aqui****');
+      
 
       console.log('Datos recibidos y enviados:', sensorData);
     });

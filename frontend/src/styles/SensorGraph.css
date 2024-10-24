@@ -23,12 +23,21 @@
   background-color: #45a049;
 }
 
-/* Contenedor del gráfico */
 .chart-container {
-  margin: 1% 10% 0% 10%;
-  width: 80%;
-  height: 80%;
+  width: 100%;  /* Ocupa el ancho completo */
+  height: 60vh; /* Ocupa 60% de la altura de la pantalla */
+  overflow-x: auto; /* Habilita el scroll horizontal */
+  padding: 10px; /* Espacio alrededor de la gráfica */
+  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
 }
+
+@media screen and (max-width: 600px) {
+  .chart-container {
+      height: 70vh; /* Mayor altura en pantallas pequeñas */
+      overflow-x: auto; /* Sigue permitiendo scroll horizontal */
+  }
+}
+
 
 /* Estilos responsivos */
 
