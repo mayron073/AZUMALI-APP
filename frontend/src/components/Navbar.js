@@ -52,7 +52,7 @@ const NavBar = () => {
                                 {userRole === 'admin' && (
                                     <li><Link to="/sensores/admin-panel">Administrador</Link></li>
                                 )}
-                                <li><Link to="/" onClick={logoutUser}>Cerrar Sesión</Link></li>
+                                <li><Link to="/" onClick={logoutUser}>Cerrar sesión</Link></li>
                             </ul>
                         )}
                     </div>

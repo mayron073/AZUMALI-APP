@@ -101,11 +101,17 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
     }
   }, [sensorDate, sensor, filter]);
 
+
   useEffect(() => {
     socket.on('sensorData', (newData) => {
-      if (newData[column]) {
-        setLabels((prevLabels) => [...prevLabels, new Date().toLocaleString()]);
-        setData((prevData) => [...prevData, newData[column]]);
+      console.log(newData);
+
+      if (newData) {
+        setLabels((prevLabels) => [new Date(newData.fecha).toLocaleString(), ...prevLabels]);
+        setData((prevData) => [newData[column], ...prevData]);
+
+        console.log(column);
+        console.log(labels);
       }
     });
 
@@ -113,6 +119,7 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
       socket.off('sensorData');
     };
   }, [column]);
+  
 
   const unit = sensorUnits[sensor] || '';
 

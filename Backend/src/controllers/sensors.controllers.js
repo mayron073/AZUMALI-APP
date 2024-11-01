@@ -8,6 +8,7 @@ const baudRate = 9600;
 const dataBits = 8;
 const parity = 'none';
 const stopBits = 1; 
+const datosInsertados = [];
 
 
 exports.getAllSensorData = (req, res) => {
@@ -48,9 +49,10 @@ exports.getColumnNames = (req, res) => {
   });
 };
 
-// Insertar datos en la base de datos
-exports.insertSensorData = (data) => {
+// Insertar datos en la base de datos y devolver la fecha
+exports.insertSensorData = (data, callback) => {
   const query = 'INSERT INTO sensores (temperatura_ambiente, direccion_viento, velocidad_viento, humedad_relativa, temperatura_interna, radiacion, fecha) VALUES (?,?,?,?,?,?,?)';
+  const fechaActual = new Date();
   const values = [
     data.temperatura_ambiente,
     data.direccion_viento,
@@ -58,14 +60,16 @@ exports.insertSensorData = (data) => {
     data.humedad_relativa,
     data.temperatura_interna,
     data.radiacion,
-    new Date()
+    fechaActual
   ];
 
   db.query(query, values, (err, result) => {
     if (err) {
       console.error('Error al insertar datos:', err);
+      if (callback) callback(err, null);
     } else {
       console.log('Datos insertados correctamente:', result.insertId);
+      if (callback) callback(null, fechaActual); // Devolver la fecha actual a través del callback
     }
   });
 };
@@ -90,21 +94,24 @@ exports.readSerialData = (io) => {
 
       const sensorData = {
         temperatura_ambiente: data.data[8] / 10,
-        temperatura_interna: data.data[9] /10,
-        humedad_relativa: data.data[12] /10,
+        temperatura_interna: data.data[9] / 10,
+        humedad_relativa: data.data[12] / 10,
         radiacion: data.data[10],
         velocidad_viento: data.data[0],
-        direccion_viento: data.data[11] 
+        direccion_viento: data.data[11]
       };
 
-      // Insertar datos en la base de datos
-      exports.insertSensorData(sensorData);
+      // Insertar datos en la base de datos y emitir al frontend con fecha
+      exports.insertSensorData(sensorData, (err, fecha) => {
+        if (!err) {
+          const dataConFecha = { ...sensorData, fecha }; // Agregar fecha al objeto de datos
 
-      io.emit('sensorData', sensorData);
-      console.log('aqui****');
-      
+          io.emit('sensorData', dataConFecha); // Emitir datos con la fecha al frontend
 
-      console.log('Datos recibidos y enviados:', sensorData);
+          console.log('Datos recibidos y enviados:', dataConFecha);
+        }
+      });
     });
   }, 60000); // Leer cada 60 segundos
 };
+
