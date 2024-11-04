@@ -1,15 +1,22 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import NavBar from '../components/Navbar';
+import useSensor from '../hooks/useSensor';
 
 const Settings = () => {
-  return(
-    <>
-      <NavBar/>
-      <h1>Pronto</h1>
-    </>
+  const { handleExportExcel } = useSensor();
 
+  return (
+    <div>
+      <NavBar />
+        <div>
+          <h2>Generar excel con datos almacenados</h2>
+          <button onClick={handleExportExcel}>Excel log</button>
+        </div>
+    </div>
   );
 };
 
 export default Settings;
+
+
 

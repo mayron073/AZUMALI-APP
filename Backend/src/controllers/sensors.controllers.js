@@ -1,6 +1,8 @@
 const db = require('../database/connection');
 const ModbusRTU = require('modbus-serial');
 const client = new ModbusRTU();
+const ExcelJS = require('exceljs');
+const { exec } = require('child_process');
 
 const modbusPort = "COM7"; 
 const modbusID = 1; 
@@ -8,7 +10,6 @@ const baudRate = 9600;
 const dataBits = 8;
 const parity = 'none';
 const stopBits = 1; 
-const datosInsertados = [];
 
 
 exports.getAllSensorData = (req, res) => {
@@ -114,4 +115,74 @@ exports.readSerialData = (io) => {
     });
   }, 60000); // Leer cada 60 segundos
 };
+
+exports.exportSensorData = (req, res) => {
+  try {
+      const query = 'SELECT * FROM sensores';
+
+      db.query(query, async (err, rows) => {
+          if (err) {
+              console.error("Error ejecutando la consulta:", err);
+              return res.status(500).json({ error: 'Error ejecutando la consulta', details: err });
+          }
+
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Sensores Data');
+
+          // Definir encabezados
+          worksheet.columns = [
+              { header: 'ID', key: 'id', width: 10 },
+              { header: 'Temperatura Ambiente (°C)', key: 'temperatura_ambiente', width: 20 },
+              { header: 'Temperatura Interna (°C)', key: 'temperatura_interna', width: 20 },
+              { header: 'Humedad Relativa (%)', key: 'humedad_relativa', width: 20 },
+              { header: 'Radiación (W/m²)', key: 'radiacion', width: 15 },
+              { header: 'Velocidad Viento (m/s)', key: 'velocidad_viento', width: 20 },
+              { header: 'Dirección Viento (Grados)', key: 'direccion_viento', width: 25 },
+              { header: 'Fecha', key: 'fecha', width: 20 }
+          ];
+
+          // Añadir filas con los datos obtenidos de la consulta
+          rows.forEach(row => worksheet.addRow(row));
+
+          // Configurar las cabeceras para la respuesta
+          res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+          res.setHeader('Content-Disposition', 'attachment; filename="sensor_data.xlsx"');
+
+          // Escribir el archivo Excel en la respuesta y finalizar
+          await workbook.xlsx.write(res);
+          res.status(200).end();
+      });
+  } catch (error) {
+      console.error("Error al generar el archivo Excel:", error);
+      res.status(500).json({ message: 'Error al generar el archivo Excel' });
+  }
+};
+
+exports.listPorts = (req, res) => {
+    exec('serialport-list -f json', (error, stdout, stderr) => {
+        if (error) {
+            console.error("Error al listar los puertos:", error);
+            return res.status(500).json({ error: "Error al listar los puertos" });
+        }
+        if (stderr) {
+            console.error("Error en la salida:", stderr);
+            return res.status(500).json({ error: "Error en la salida de la lista de puertos" });
+        }
+        
+        // Parseamos la salida en JSON
+        try {
+            const ports = JSON.parse(stdout);
+            res.json(ports); // Enviamos la lista de puertos como respuesta JSON
+        } catch (parseError) {
+            console.error("Error al parsear la salida JSON:", parseError);
+            res.status(500).json({ error: "Error al parsear la salida JSON" });
+        }
+    });
+};
+
+
+
+
+
+
 

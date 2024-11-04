@@ -22,8 +22,7 @@ const AuthProvider = ({ children }) => {
             const data = await response.json();
             setAuth(data);
             setAuthToken(data.token);
-            setUserRole(data.role);
-            
+            setUserRole(data.role);            
             return true;
         } else {
             return false;
@@ -76,7 +75,8 @@ const AuthProvider = ({ children }) => {
             users, 
             authToken, 
             getUserRole,
-            userRole, 
+            userRole,
+            setUserRole, 
             auth, 
             setAuth
              }}>

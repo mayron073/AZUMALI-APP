@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'http://192.168.1.65:3000',  // Debe coincidir con la URL de tu frontend
+  origin: `http://${IP}:3000`,  // Debe coincidir con la URL de tu frontend
   methods: ['GET', 'POST'],
   credentials: true,
 }));
@@ -36,7 +36,7 @@ server.listen(PORT, '0.0.0.0', () => {
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://192.168.1.65:3000',
+    origin: `http://${IP}:3000`,
     methods: ['GET', 'POST'],
     credentials: true,
     allowedHeaders: ["my-custom-header"], // Puedes añadir más si lo necesitas

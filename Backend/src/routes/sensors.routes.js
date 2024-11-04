@@ -9,4 +9,10 @@ router.get('/sensor-date', [authMiddleware], sensorController.getAllSensorData);
 // Obtener los nombres de todas las columnas
 router.get('/sensor-name', [authMiddleware], sensorController.getColumnNames);
 
+// Obtener excel generado
+router.get('/export-excel',[authMiddleware], sensorController.exportSensorData);
+
+// Obtener lista de puertos COM
+router.get('/com-ports',[authMiddleware], sensorController.listPorts);
+
 module.exports = router;

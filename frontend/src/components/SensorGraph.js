@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import { io } from 'socket.io-client'; 
 import useSensor from '../hooks/useSensor';
+import useMenu from '../hooks/useMenu';
 import NavBar from './Navbar';
 import '../styles/SensorGraph.css';
 
@@ -48,7 +49,7 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
   const { getSensorDate, sensorDate } = useSensor();
   const [filter, setFilter] = useState('hora');
   const [ text, setText ] = useState('');
-  
+  const { menuOpen } = useMenu();
   const chartRef = useRef(null); // Referencia para la gráfica
 
   // Función para obtener el número de datos según el filtro seleccionado
@@ -120,7 +121,6 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
     };
   }, [column]);
   
-
   const unit = sensorUnits[sensor] || '';
 
   // Opciones para la gráfica
@@ -174,14 +174,14 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
     <>
       <NavBar />
       <div className="App">
-        {/* Botones para seleccionar el filtro */}
-        <div className="filter-buttons">
-          <button onClick={() => setFilter('hora')}>Hora</button>
-          <button onClick={() => setFilter('diario')}>Diario</button>
-          <button onClick={() => setFilter('mes')}>Mes</button>
-        </div>
-
-        {/* Componente gráfico de línea */}
+        {/* Condicional para mostrar u ocultar los botones de filtro */}
+        {!menuOpen && (
+          <div className="filter-buttons">
+            <button onClick={() => setFilter('hora')}>Hora</button>
+            <button onClick={() => setFilter('diario')}>Diario</button>
+            <button onClick={() => setFilter('mes')}>Mes</button>
+          </div>
+        )}
         <div className="chart-container">
           <Line data={chartData} options={options} ref={chartRef} />
         </div>

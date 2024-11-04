@@ -1,26 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import useMenu from '../hooks/useMenu';
+
 import '../styles/NavBar.css';
 import sena from '../assets/sena.png';
 
 const NavBar = () => {
-    const { userRole, getUserRole, logoutUser } = useAuth();
+    const { getUserRole, userRole, logoutUser } = useAuth();
+    const { menuOpen, toggleMenu } = useMenu();  
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         getUserRole();
-    }, []);
-
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
-    // Función para alternar el menú hamburguesa
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
-    };
+    },[]);
 
     return (
         <nav className="navbar">
@@ -42,20 +35,18 @@ const NavBar = () => {
                 <li><Link to="/sensores/wind-speed">Velocidad del Viento</Link></li>
                 <li><Link to="/sensores/wind-direction">Dirección del Viento</Link></li>
                 <li>
-                    <div className="dropdown">
-                        <button onClick={toggleDropdown} className="dropdown-toggle">
+                    <details className="dropdown">
+                        <summary role="button" className="dropdown-toggle">
                             Herramientas
-                        </button>
-                        {dropdownOpen && (
-                            <ul className="dropdown-menu">
-                                <li><Link to="/sensores/settings">Configuración</Link></li>
-                                {userRole === 'admin' && (
-                                    <li><Link to="/sensores/admin-panel">Administrador</Link></li>
-                                )}
-                                <li><Link to="/" onClick={logoutUser}>Cerrar sesión</Link></li>
-                            </ul>
-                        )}
-                    </div>
+                        </summary>
+                        <ul className="dropdown-menu">
+                            <li><Link to="/sensores/settings">Configuración</Link></li>
+                            {userRole === 'admin' && (
+                                <li><Link to="/sensores/admin-panel">Administrador</Link></li>
+                            )}
+                            <li><Link to="/" onClick={logoutUser}>Cerrar sesión</Link></li>
+                        </ul>
+                    </details>
                 </li>
             </ul>
         </nav>
@@ -63,3 +54,5 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+
