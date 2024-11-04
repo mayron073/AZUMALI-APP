@@ -47,6 +47,19 @@
     border-radius: 5px;
 }
 
+.dropdown-button{
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    padding: 10px 15px;
+    margin: 0;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
 /* Dropdown estilos generales */
 .dropdown {
     position: relative;
@@ -104,6 +117,11 @@
     border-radius: 5px;
 }
 
+.dropdown-button:hover {
+    background-color: var(--dropdown-highlight);
+    color: var(--dropdown-background);
+    border-radius: 5px;
+}
 
 
 /* Botón hamburguesa */
@@ -163,6 +181,6 @@
     }
 
     .dropdown-menu li a {
-        font-size: 10px;
+        font-size: 11px;
     }
 }

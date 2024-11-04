@@ -1,53 +1,106 @@
+/* Contenedor principal */
 .admin-panel-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sección de configuración */
+.config-section {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+/* Sección de la tabla */
+.table-section {
+  flex: 1;
+  max-height: 70vh; /* Limita la altura de la tabla */
+  overflow-y: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+/* Botón de conectar */
+.connect-button {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.connect-button:hover {
+  background-color: #45a049;
+}
+
+/* Tabla de usuarios */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th, .users-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  font-size: 0.9em; /* Ajuste para tamaños menores */
+}
+
+.users-table th {
+  background-color: #00411278;
+  color: white;
+}
+
+.users-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.users-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+/* Responsivo: para pantallas pequeñas */
+@media (max-width: 768px) {
+  .admin-panel-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
   }
   
   h2 {
-    text-align: center;
-    color: #333;
-  }
-  
-  .users-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .users-table th, .users-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
+    font-size: 1.0em;
     text-align: left;
+    
+  }
+
+  .config-section, .table-section {
+    padding: 15px;
+    font-size: 0.9em;
   }
   
-  .users-table th {
-    background-color: #f2f2f2;
-    color: #333;
-  }
-  
-  .users-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .users-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  
+  /* Ajusta la tabla para pantallas pequeñas */
   .users-table th, .users-table td {
-    padding: 10px;
+    padding: 8px;
+    font-size: 0.85em;
   }
-  
-  .users-table th {
-    background-color: #0300b378;
-    color: white;
+
+  /* Botón de conectar en pantallas pequeñas */
+  .connect-button {
+    padding: 8px 12px;
+    font-size: 0.8em;
   }
-  
-  .users-table tr:hover {
-    background-color: #ddd;
-  }
-  
-  
+}

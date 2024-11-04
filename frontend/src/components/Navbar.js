@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import useMenu from '../hooks/useMenu';
+import useSensor from '../hooks/useSensor';
 
 import '../styles/NavBar.css';
 import sena from '../assets/sena.png';
@@ -9,15 +10,16 @@ import sena from '../assets/sena.png';
 const NavBar = () => {
     const { getUserRole, userRole, logoutUser } = useAuth();
     const { menuOpen, toggleMenu } = useMenu();  
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const { handleExportExcel } = useSensor();
+    //const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         getUserRole();
     },[]);
 
-    return (
+    return ( 
         <nav className="navbar">
-            <img src={sena} alt='sena-logo' className='img' />
+            <img src={sena} alt="sena-logo" className="img" />
             
             {/* Botón de hamburguesa para pantallas pequeñas */}
             <button className="hamburger" onClick={toggleMenu}>
@@ -25,7 +27,7 @@ const NavBar = () => {
                 <span className="bar"></span>
                 <span className="bar"></span>
             </button>
-
+    
             {/* Enlaces de navegación, mostrar/ocultar según el estado del menú */}
             <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
                 <li><Link to="/sensores/temperature">Temperatura Ambiente</Link></li>
@@ -40,7 +42,11 @@ const NavBar = () => {
                             Herramientas
                         </summary>
                         <ul className="dropdown-menu">
-                            <li><Link to="/sensores/settings">Configuración</Link></li>
+                            <li>
+                                <button onClick={handleExportExcel} className="dropdown-button">
+                                    Excel log
+                                </button>
+                            </li>
                             {userRole === 'admin' && (
                                 <li><Link to="/sensores/admin-panel">Administrador</Link></li>
                             )}
@@ -51,6 +57,7 @@ const NavBar = () => {
             </ul>
         </nav>
     );
+    
 };
 
 export default NavBar;

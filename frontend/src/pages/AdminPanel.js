@@ -7,8 +7,8 @@ import '../styles/AdminPanel.css';
 
 const AdminPanel = () => {
   const [ usuarios, setUsuarios] = useState([]);
-  const { getUsers, users } = useAuth();
-  const { comPorts, fetchComPorts } = useSensor();
+  const { getUsers } = useAuth();
+  const { comPorts, fetchComPorts, startReadingData } = useSensor();
   const [ selectedPort, setSelectedPort ] = useState('');
 
   useEffect(() => {
@@ -27,12 +27,16 @@ const AdminPanel = () => {
     setSelectedPort(event.target.value);
   };
 
+  const handleConnect = () => {
+    startReadingData(); // Llamar a startReadingData al hacer clic en "Conectar"
+  };
+
   return (
     <>
-      <NavBar/>
+      <NavBar />
       <div className="admin-panel-container">
-      <div>
-          <h2>Puerto para comunicacion serial con estacion</h2>
+        <div className="config-section">
+          <h2>Puerto para comunicación serial con estación</h2>
           <select value={selectedPort} onChange={handlePortChange}>
             <option value="">Seleccione un puerto COM</option>
             {comPorts.map((port) => (
@@ -41,29 +45,38 @@ const AdminPanel = () => {
               </option>
             ))}
           </select>
+          <div>
+            <h2>Conectar estación meteorológica</h2>
+          </div>
+          <button className="connect-button" onClick={handleConnect}>Conectar</button>
         </div>
-        <h2>Tabla de usuarios</h2>
-        <table className="users-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Rol</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usuarios.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.role}</td>
+        
+        <div className="table-section">
+          <h2>Tabla de usuarios</h2>
+          <table className="users-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Rol</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {usuarios.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.username}</td>
+                  <td>{user.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );
+  
 };
 
 export default AdminPanel;
+

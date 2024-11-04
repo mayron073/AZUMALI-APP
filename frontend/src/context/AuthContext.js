@@ -59,7 +59,6 @@ const AuthProvider = ({ children }) => {
       
             const response = await axios.get('http://192.168.1.65:4000/usuarios/users', config);
             setUsers(response.data);
-            console.log(response.data);
             return response.data;
             
           } catch (error) {

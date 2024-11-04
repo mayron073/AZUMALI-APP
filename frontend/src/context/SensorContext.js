@@ -7,7 +7,6 @@ const SensorProvider = ({ children }) => {
   const [sensorDate, setSensorDate] = useState([]);
   const [comPorts, setComPorts] = useState([]); // Estado para almacenar los puertos COM
 
-
   const getSensorDate = async (sensor, limit) => {
     try {
       const token = localStorage.getItem("token");
@@ -31,7 +30,29 @@ const SensorProvider = ({ children }) => {
     }
   };
 
-  // Nueva función para exportar a Excel
+  const startReadingData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Pasa un objeto vacío como cuerpo de la solicitud, luego config
+      await axios.post('http://192.168.1.65:4000/sensores/start-reading', {}, config);
+      console.log('Lectura de datos iniciada');
+
+    } catch (error) {
+      console.error('Error en la conexión:', error);
+    }
+  };
+
+
+  // función para exportar a Excel
   const handleExportExcel = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -72,7 +93,9 @@ const SensorProvider = ({ children }) => {
       };
 
       const response = await axios.get('http://192.168.1.65:4000/sensores/com-ports', config);
-      setComPorts(response.data); // Guardar los puertos en el estado
+      setComPorts(response.data);
+      //console.log(response.data);
+      
     } catch (error) {
       console.error("Error al obtener la lista de puertos COM:", error);
     }
@@ -85,6 +108,7 @@ const SensorProvider = ({ children }) => {
         comPorts,
         setSensorDate,
         getSensorDate,
+        startReadingData,
         handleExportExcel,
         fetchComPorts,
       }}

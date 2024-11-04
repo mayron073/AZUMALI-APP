@@ -43,5 +43,7 @@ const io = new Server(server, {
   },
 });
 
+app.set('io', io);
+
 // Leer datos desde puerto serie y enviar en tiempo real
-sensorController.readSerialData(io);
+//sensorController.readSerialData(io);

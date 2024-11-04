@@ -116,6 +116,14 @@ exports.readSerialData = (io) => {
   }, 60000); // Leer cada 60 segundos
 };
 
+// Iniciar lectura de datos
+exports.startReadingData = (req, res) => {
+  const io = req.app.get('io'); // Acceder a io
+  exports.readSerialData(io); // Llamar a la función de lectura
+  res.status(200).json({ message: 'Lectura de datos iniciada' });
+};
+
+
 exports.exportSensorData = (req, res) => {
   try {
       const query = 'SELECT * FROM sensores';
