@@ -1,6 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import Navbar from "../components/Navbar";
 
 const RutaProtegida = () => {
 
@@ -11,7 +10,6 @@ const RutaProtegida = () => {
 
   return (
     <div className="h-full">
-      {/* <Navbar /> */}
       <Outlet />
     </div>
   );

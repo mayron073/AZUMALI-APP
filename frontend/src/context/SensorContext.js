@@ -30,7 +30,7 @@ const SensorProvider = ({ children }) => {
     }
   };
 
-  const startReadingData = async () => {
+  const startReadingData = async (puerto) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -43,7 +43,7 @@ const SensorProvider = ({ children }) => {
       };
 
       // Pasa un objeto vacío como cuerpo de la solicitud, luego config
-      await axios.post('http://192.168.1.65:4000/sensores/start-reading', {}, config);
+      await axios.post('http://192.168.1.65:4000/sensores/start-reading', {puerto}, config);
       console.log('Lectura de datos iniciada');
 
     } catch (error) {

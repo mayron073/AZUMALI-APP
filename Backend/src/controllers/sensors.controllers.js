@@ -4,7 +4,7 @@ const client = new ModbusRTU();
 const ExcelJS = require('exceljs');
 const { exec } = require('child_process');
 
-const modbusPort = "COM7"; 
+//const modbusPort = 'COM7'; 
 const modbusID = 1; 
 const baudRate = 9600; 
 const dataBits = 8;
@@ -75,9 +75,23 @@ exports.insertSensorData = (data, callback) => {
   });
 };
 
+// Iniciar lectura de datos
+exports.startReadingData = (req, res) => {
+  const { puerto } = req.body; // Extrae el puerto de la solicitud
+  const io = req.app.get('io'); // Accede a io para WebSocket
+
+  if (!puerto) {
+    return res.status(400).json({ error: 'El puerto es obligatorio.' });
+  }
+
+  // Llama a readSerialData y pasa puerto e io como argumentos
+  exports.readSerialData({ puerto, io });
+  res.status(200).json({ message: 'Lectura de datos iniciada' });
+};
+
 // Leer datos desde puerto serie usando Modbus y emitirlos a través de socket.io
-exports.readSerialData = (io) => {
-  client.connectRTUBuffered(modbusPort, { baudRate: baudRate, dataBits: dataBits, parity: parity, stopBits: stopBits }, (err) => {
+exports.readSerialData = ({puerto, io}) => {
+  client.connectRTUBuffered(puerto, { baudRate: baudRate, dataBits: dataBits, parity: parity, stopBits: stopBits }, (err) => {
     if (err) {
       return console.error('Error conectando a Modbus:', err);
     }
@@ -114,13 +128,6 @@ exports.readSerialData = (io) => {
       });
     });
   }, 60000); // Leer cada 60 segundos
-};
-
-// Iniciar lectura de datos
-exports.startReadingData = (req, res) => {
-  const io = req.app.get('io'); // Acceder a io
-  exports.readSerialData(io); // Llamar a la función de lectura
-  res.status(200).json({ message: 'Lectura de datos iniciada' });
 };
 
 

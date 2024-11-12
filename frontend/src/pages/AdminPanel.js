@@ -27,8 +27,14 @@ const AdminPanel = () => {
     setSelectedPort(event.target.value);
   };
 
-  const handleConnect = () => {
-    startReadingData(); // Llamar a startReadingData al hacer clic en "Conectar"
+  const handleConnect = (e) => {
+    e.preventDefault();
+    
+    if (selectedPort) {
+      startReadingData(selectedPort);
+    } else {
+      console.error("Seleccione un puerto antes de conectar");
+    }
   };
 
   return (
