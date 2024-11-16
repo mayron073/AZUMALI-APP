@@ -28,7 +28,9 @@ ChartJS.register(
   Legend
 );
 
-const socket = io('http://192.168.1.65:4000' ,{
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+const socket = io(`${backendUrl}` ,{
   transports: ['websocket'],  
   withCredentials: true,
 });

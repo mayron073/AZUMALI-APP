@@ -16,7 +16,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const { data } = await axios.post(`http://192.168.1.65:4000/usuarios/login`, {username, password});
+            const { data } = await axios.post(`${backendUrl}/usuarios/login`, {username, password});
             localStorage.setItem('token', data.token);
             console.log(data);
             setAuth(data);

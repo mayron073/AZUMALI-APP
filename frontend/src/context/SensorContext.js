@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import axios from "axios";
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 const SensorContext = createContext();
 
@@ -23,7 +24,7 @@ const SensorProvider = ({ children }) => {
       queryParams.append('column', sensor);
       queryParams.append('limit', limit);
 
-      const response = await axios.get(`http://192.168.1.65:4000/sensores/sensor-date?${queryParams.toString()}`, config);
+      const response = await axios.get(`${backendUrl}/sensores/sensor-date?${queryParams.toString()}`, config);
       setSensorDate(response.data);
     } catch (error) {
       console.log(error);
@@ -43,7 +44,7 @@ const SensorProvider = ({ children }) => {
       };
 
       // Pasa un objeto vacío como cuerpo de la solicitud, luego config
-      await axios.post('http://192.168.1.65:4000/sensores/start-reading', {puerto}, config);
+      await axios.post(`${backendUrl}/sensores/start-reading`, {puerto}, config);
       console.log('Lectura de datos iniciada');
 
     } catch (error) {
@@ -66,7 +67,7 @@ const SensorProvider = ({ children }) => {
         responseType: 'blob'  // Importante para recibir el archivo
       };
 
-      const response = await axios.get('http://192.168.1.65:4000/sensores/export-excel', config);
+      const response = await axios.get(`${backendUrl}/sensores/export-excel`, config);
 
       // Crear enlace de descarga
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -92,9 +93,8 @@ const SensorProvider = ({ children }) => {
         },
       };
 
-      const response = await axios.get('http://192.168.1.65:4000/sensores/com-ports', config);
+      const response = await axios.get(`${backendUrl}/sensores/com-ports`, config);
       setComPorts(response.data);
-      //console.log(response.data);
       
     } catch (error) {
       console.error("Error al obtener la lista de puertos COM:", error);

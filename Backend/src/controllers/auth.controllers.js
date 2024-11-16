@@ -5,25 +5,48 @@ const db = require('../database/connection'); // Conexión a la base de datos
 
 
     exports.register = async (req, res) => {
-        const { username, password, role } = req.body;
+        const { username, password } = req.body;
 
-        // Verificar si el usuario ya existe
-        const sqlCheck = 'SELECT * FROM users WHERE username = ?';
-        db.query(sqlCheck, [username], (err, result) => {
+        // Verificar si existe un administrador
+        const query = 'SELECT * FROM users WHERE role = "admin"';
+
+        db.query(query, (err, result) => {
             if (err) throw err;
+
             if (result.length > 0) {
-                return res.status(400).send('El nombre de usuario ya está en uso');
+                // Verificar si el usuario ya existe
+                const sqlCheck = 'SELECT * FROM users WHERE username = ?';
+
+                db.query(sqlCheck, [username], (err, result) => {
+                    if (err) throw err;
+
+                    if (result.length > 0) {
+                        return res.status(400).send('El nombre de usuario ya está en uso');
+                    }
+                    
+                    // Hashear la contraseña antes de guardarla
+                    const hashedPassword = bcrypt.hashSync(password, 10);
+
+                    // Insertar el nuevo usuario
+                    const sqlInsert = "INSERT INTO users (username, password, role) VALUES (?, ?, 'user')";
+
+                    db.query(sqlInsert, [username, hashedPassword], (err, result) => {
+                        if (err) throw err;
+                        res.status(201).send('Usuario registrado exitosamente');
+                    });
+                });
             }
-    
-            // Hashear la contraseña antes de guardarla
-            const hashedPassword = bcrypt.hashSync(password, 10);
-    
-            // Insertar el nuevo usuario
-            const sqlInsert = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)';
-            db.query(sqlInsert, [username, hashedPassword, role || 'user'], (err, result) => {
-                if (err) throw err;
-                res.status(201).send('Usuario registrado exitosamente');
-            });
+            else {
+                // Hashear la contraseña antes de guardarla
+                const hashedPassword = bcrypt.hashSync(password, 10);
+        
+                // Insertar el nuevo usuario
+                const sqlInsert = "INSERT INTO users (username, password, role) VALUES (?, ?, 'admin')";
+                db.query(sqlInsert, [username, hashedPassword], (err, result) => {
+                    if (err) throw err;
+                    res.status(201).send('administrador registrado exitosamente');
+                });
+            }
         });
     };
 

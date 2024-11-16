@@ -6,10 +6,8 @@ const cors = require('cors');
 
 const sensorRoutes = require('./routes/sensors.routes');
 const authRoutes = require('./routes/auth.routes');
-const sensorController = require('./controllers/sensors.controllers');
 const authMiddleware  = require('./middlewares/auth.middleware');
 
-//console.log("JWT Secret:", process.env.JWT_SECRET);
 const PORT = process.env.PORT || 5000;
 const IP = process.env.LOCAL_IP;
 
@@ -21,7 +19,6 @@ app.use(cors({
   methods: ['GET', 'POST'],
   credentials: true,
 }));
-//app.use(cors());
 
 const server = http.createServer(app);
 
@@ -39,11 +36,8 @@ const io = new Server(server, {
     origin: `http://${IP}:3000`,
     methods: ['GET', 'POST'],
     credentials: true,
-    allowedHeaders: ["my-custom-header"], // Puedes añadir más si lo necesitas
+    allowedHeaders: ["my-custom-header"],
   },
 });
 
 app.set('io', io);
-
-// Leer datos desde puerto serie y enviar en tiempo real
-//sensorController.readSerialData(io);

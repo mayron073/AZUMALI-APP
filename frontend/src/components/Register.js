@@ -8,17 +8,17 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('user');
+    //const [role, setRole] = useState('user');
     const history = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         try {
-            const data = await axios.post('http://192.168.1.65:4000/usuarios/register', {
+            const data = await axios.post(`${backendUrl}/usuarios/register`, {
                 username, 
                 password,
-                role
+                //role
             });
 
             if (data.status === 201) {
@@ -50,6 +50,7 @@ const Register = () => {
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
                 />
+                {/*
                 <label>Rol</label>
                 <select 
                     value={role} 
@@ -57,7 +58,7 @@ const Register = () => {
                 >
                     <option value="user">Usuario</option>
                     <option value="admin">Administrador</option>
-                </select>
+                </select> */}
                 <button type="submit">Registrar</button>
                 <Link to='/'>Regresar</Link>
             </form>

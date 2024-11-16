@@ -57,7 +57,7 @@ const AuthProvider = ({ children }) => {
               },
             };
       
-            const response = await axios.get('http://192.168.1.65:4000/usuarios/users', config);
+            const response = await axios.get(`${backendUrl}/usuarios/users`, config);
             setUsers(response.data);
             return response.data;
             
