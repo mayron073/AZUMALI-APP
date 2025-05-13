@@ -60,31 +60,6 @@ exports.getColumnNames = (req, res) => {
   });
 };
 
-/* Insertar datos en la base de datos y devolver la fecha
-exports.insertSensorData = (data, callback) => {
-  const query = 'INSERT INTO sensores (temperatura_ambiente, direccion_viento, velocidad_viento, humedad_relativa, temperatura_interna, radiacion, fecha) VALUES (?,?,?,?,?,?,?)';
-  const fechaActual = new Date();
-  const values = [
-    data.temperatura_ambiente,
-    data.direccion_viento,
-    data.velocidad_viento,
-    data.humedad_relativa,
-    data.temperatura_interna,
-    data.radiacion,
-    fechaActual
-  ];
-
-  db.query(query, values, (err, result) => {
-    if (err) {
-      console.error('Error al insertar datos:', err);
-      if (callback) callback(err, null);
-    } else {
-      console.log('Datos insertados correctamente:', result.insertId);
-      if (callback) callback(null, fechaActual); // Devolver la fecha actual a través del callback
-    }
-  });
-};
-*/
 
 //********************************************************************************************************** */
 // Iniciar lectura de datos
@@ -144,7 +119,8 @@ exports.readSerialData = ({puerto, io}) => {
   }, 60000); // Leer cada 60 segundos
 };
 
-//*************************************************************************************************************** */
+//*******************************************************************************************************************************
+// Generar excel con datos actuales
 exports.exportSensorData = (req, res) => {
   try {
       const query = 'SELECT * FROM sensores';
@@ -211,7 +187,8 @@ exports.listPorts = (req, res) => {
     });
 };
 
-
+//*********************************************************************************************************************************** 
+// Insertar datos y generar archivos excel cada 1000 filas
 exports.insertSensorData = (data, callback) => {
   const query = 'INSERT INTO sensores (temperatura_ambiente, direccion_viento, velocidad_viento, humedad_relativa, temperatura_interna, radiacion, fecha) VALUES (?,?,?,?,?,?,?)';
   const fechaActual = new Date();
@@ -247,7 +224,7 @@ exports.insertSensorData = (data, callback) => {
       const totalRows = countResult[0].total;
       console.log('Total de filas en la tabla:', totalRows);
 
-      if (totalRows >= 3) {
+      if (totalRows >= 1000) {
         console.log('Generando archivo Excel y eliminando datos de la tabla...');
 
         // Generar archivo Excel
@@ -274,8 +251,8 @@ exports.insertSensorData = (data, callback) => {
   });
 };
 
-
-// Función para exportar los datos a un archivo Excel
+//****************************************************************************************************************************************** */
+// exportar los datos a un archivo Excel
 async function exportSensorDataToFile(filePath) {
   return new Promise((resolve, reject) => {
     const query = 'SELECT * FROM sensores';
