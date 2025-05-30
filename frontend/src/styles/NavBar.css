@@ -84,10 +84,10 @@
 
 .dropdown-menu {
     position: absolute;
-    margin: 16px 0 0 0;
+    margin: 5px 0 0 0;
     padding: 10px 0;
     width: var(--dropdown-width);
-    left: 47%;
+    left: 93%;
     transform: translateX(-50%);
     background: var(--dropdown-background);
     border-radius: 6px;

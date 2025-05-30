@@ -1,0 +1,79 @@
+.dashboard-container {
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.header-info {
+  width: 60%;
+  margin-top: 5%;
+  padding-left: 30px;
+  margin-bottom: 2rem;
+}
+
+.img {
+  width: 240px;
+  height: 240px;
+  position: absolute;
+  margin-left: 65%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sensor-grid {
+  margin-top: 130px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.sensor-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  background-color: #f0f8ff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sensor-card:hover {
+  transform: scale(1.05);
+}
+
+.sensor-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.floating-home-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  margin-left: 85%;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.floating-menu-btn {
+  position: fixed;
+  top: 10px;
+  right: 70px;
+  background: #347928;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}

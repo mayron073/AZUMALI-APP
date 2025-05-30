@@ -5,6 +5,8 @@ import useSensor from '../hooks/useSensor';
 import useMenu from '../hooks/useMenu';
 import NavBar from './Navbar';
 import '../styles/SensorGraph.css';
+import { useNavigate } from 'react-router-dom';
+import FloatingMenu from '../components/FloatingMenu';
 
 import {
   Chart as ChartJS,
@@ -53,6 +55,7 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
   const [ text, setText ] = useState('');
   const { menuOpen } = useMenu();
   const chartRef = useRef(null); // Referencia para la gráfica
+  const [menuVisible, setMenuVisible] = useState(false);
 
   // Función para obtener el número de datos según el filtro seleccionado
   const getLimitByFilter = (filter) => {
@@ -172,9 +175,23 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
     }
   };
 
+  const navigate = useNavigate();
+
+
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
+
+      <button
+        className="floating-menu-btn"
+        onClick={() => setMenuVisible(!menuVisible)}
+        title="Menú"
+      >
+        ⚙️
+      </button>
+
+      <FloatingMenu visible={menuVisible} />
+
       <div className="App">
         {/* Condicional para mostrar u ocultar los botones de filtro */}
         {!menuOpen && (
@@ -188,6 +205,14 @@ const SensorGraph = ({ sensor = 'temperatura_ambiente' }) => {
           <Line data={chartData} options={options} ref={chartRef} />
         </div>
       </div>
+      <button
+        className="floating-home-btn"
+        onClick={() => navigate('/sensores')}
+        title="Volver al inicio"
+      >
+        🏠
+      </button>
+
     </>
   );
 };

@@ -1,5 +1,6 @@
 /* Contenedor principal */
 .admin-panel-container {
+  margin-top: 80px;
   display: flex;
   gap: 20px;
   padding: 20px;
@@ -50,14 +51,14 @@
 }
 
 .users-table th, .users-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   padding: 12px;
   text-align: left;
   font-size: 0.9em; /* Ajuste para tamaños menores */
 }
 
 .users-table th {
-  background-color: #00411278;
+  background-color: #1644ff78;
   color: white;
 }
 
@@ -72,6 +73,23 @@
 h2 {
   font-size: 18px;
 }
+
+.floating-menu-btn {
+  position: fixed;
+  top: 10px;
+  right: 70px;
+  background: #347928;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 /* Responsivo: para pantallas pequeñas */
 @media (max-width: 768px) {
@@ -104,3 +122,4 @@ h2 {
     font-size: 0.8em;
   }
 }
+

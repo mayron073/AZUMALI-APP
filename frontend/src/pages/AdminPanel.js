@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/Navbar';
 import useAuth from '../hooks/useAuth';
 import useSensor from '../hooks/useSensor';
+import FloatingMenu from '../components/FloatingMenu';
 
 import '../styles/AdminPanel.css';
 
@@ -10,6 +12,8 @@ const AdminPanel = () => {
   const { getUsers } = useAuth();
   const { comPorts, fetchComPorts, startReadingData } = useSensor();
   const [ selectedPort, setSelectedPort ] = useState('');
+  const [menuVisible, setMenuVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -39,7 +43,23 @@ const AdminPanel = () => {
 
   return (
     <>
-      <NavBar />
+      <button
+        className="floating-home-btn"
+        onClick={() => navigate('/sensores')}
+        title="Página de Inicio"
+      >
+        🏠
+      </button>
+      <button
+        className="floating-menu-btn"
+        onClick={() => setMenuVisible(!menuVisible)}
+        title="Menú"
+      >
+        ⚙️
+      </button>
+
+      <FloatingMenu visible={menuVisible} />
+
       <div className="admin-panel-container">
         <div className="config-section">
           <h2>Puerto para comunicación serial con estación</h2>
