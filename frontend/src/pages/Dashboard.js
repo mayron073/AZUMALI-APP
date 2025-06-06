@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import FloatingMenu from '../components/FloatingMenu';
+import MapComponent from '../components/MapComponent';
 import '../styles/Dashboard.css';
 import estacion from '../assets/estacion.jpg';
 
@@ -27,12 +28,12 @@ const socket = io(backendUrl, {
 });
 
 const sensorInfo = [
-  { name: 'Temperatura Ambiente', key: 'temperatura_ambiente', path: 'temperature' },
-  { name: 'Temperatura Interna', key: 'temperatura_interna', path: 'internal-temperature' },
-  { name: 'Humedad Relativa', key: 'humedad_relativa', path: 'humidity' },
-  { name: 'Radiación', key: 'radiacion', path: 'radiation' },
-  { name: 'Velocidad del Viento', key: 'velocidad_viento', path: 'wind-speed' },
-  { name: 'Dirección del Viento', key: 'direccion_viento', path: 'wind-direction' },
+  { name: 'Temperatura Ambiente (°c)', key: 'temperatura_ambiente', path: 'temperature' },
+  { name: 'Temperatura Interna (°c)', key: 'temperatura_interna', path: 'internal-temperature' },
+  { name: 'Humedad Relativa (%)', key: 'humedad_relativa', path: 'humidity' },
+  { name: 'Radiación (W/m²)', key: 'radiacion', path: 'radiation' },
+  { name: 'Velocidad del Viento (m/s)', key: 'velocidad_viento', path: 'wind-speed' },
+  { name: 'Dirección del Viento (N = 0°)', key: 'direccion_viento', path: 'wind-direction' },
 ];
 
 const Dashboard = () => {
@@ -58,6 +59,9 @@ const Dashboard = () => {
           <h1>Estación Meteorológica 1</h1>
           <p>Esta aplicación web permite la monitorización en tiempo real de variables climáticas mediante el uso de sensores conectados a un controlador de comunicacion serial. la aplicacion recolecta datos cada 60 segundos de sensores de temperatura ambiente, temperatura interna, humedad relativa, radiación solar, velocidad y dirección del viento. Estos datos se almacenan en una base de datos MySQL y se visualizan a través de gráficas interactivas en el frontend utilizando tecnologías como React y Chart.js.</p>
         </div>
+        <div>
+          <MapComponent/>
+        </div>
       </div>
 
       <div className="sensor-grid">
@@ -71,6 +75,7 @@ const Dashboard = () => {
             <p className="sensor-value">
               {sensorData[sensor.key] !== undefined ? sensorData[sensor.key] : '...'}
             </p>
+            <h6>Ver grafica</h6>
           </div>
         ))}
       </div>
